@@ -80,3 +80,40 @@ See the `evidence/` directory for redacted screenshots of the investigation.
 ## Conclusion
 
 This project strengthened my practical understanding of AWS cloud security, CloudTrail investigation, network access controls, and security configuration assessment.
+
+## Automated Alerting Validation
+
+### Objective
+To verify that AWS CloudTrail, Amazon EventBridge, and Amazon SNS work together to detect and notify administrators about sensitive AWS configuration changes.
+
+### Test Scenario
+A controlled modification was made to an isolated EC2 Security Group to generate an `AuthorizeSecurityGroupIngress` API event.
+
+### Event Details
+- **AWS Service:** Amazon EC2
+- **Event Name:** AuthorizeSecurityGroupIngress
+- **Event Source:** aws.ec2
+- **Event Detail Type:** AWS API Call via CloudTrail
+- **AWS Region:** eu-north-1
+- **Notification Service:** Amazon SNS
+
+### Alert Pipeline
+
+1. CloudTrail recorded the Security Group modification.
+2. EventBridge received and matched the CloudTrail event.
+3. EventBridge forwarded the matching event to the SNS topic.
+4. SNS delivered an email notification.
+
+### Result
+
+**Status: Successful**
+
+An email notification was successfully received after the controlled Security Group modification.
+
+This confirmed that the end-to-end alerting pipeline was operational.
+
+### Security Notes
+- The test used an isolated Security Group.
+- The test source was a documentation-only IP range.
+- The test did not involve an actual attack or compromise.
+- Sensitive AWS identifiers and personal information are excluded from published evidence.
